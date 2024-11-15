@@ -29,6 +29,8 @@ class TestDeathNote{
         e = assertThrows(IllegalArgumentException.class, () -> dbook.getRule(-1));
         assertNotNull(e.getMessage());
         assertFalse(e.getMessage().isEmpty() || e.getMessage().isBlank());
-
     }
+
+    @Test
+    void 
 }

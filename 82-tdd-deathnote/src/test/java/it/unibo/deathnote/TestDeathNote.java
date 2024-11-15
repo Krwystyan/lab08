@@ -32,7 +32,7 @@ class TestDeathNote{
         assertFalse(e.getMessage().isEmpty() || e.getMessage().isBlank());
         e = assertThrows(IllegalArgumentException.class, () -> dbook.getRule(-1));
         assertNotNull(e.getMessage());
-        assertFalse(e.getMessage().isEmpty() || e.getMessage().isBlank());
+        assertFalse(e.getMessage().isBlank());
     }
 
     @Test
@@ -54,7 +54,7 @@ class TestDeathNote{
     }
 
     @Test
-    void testCauseOfDeath(){
+    void testCauseOfDeath() throws InterruptedException{
         assertThrows(IllegalStateException.class, ()->dbook.writeDeathCause("Shit is self"));
         dbook.writeName(DEFAULT_VICTIM);
         assertEquals("heart attack", dbook.getDeathCause(DEFAULT_VICTIM));
@@ -62,5 +62,19 @@ class TestDeathNote{
         dbook.writeDeathCause("karting accident");
         assertEquals("karting accident", dbook.getDeathCause(DEFAULT_CHECK_VICTIM));
         sleep(INVALID_CAUSE_TIME);
+        assertEquals("karting accident", dbook.getDeathCause(DEFAULT_CHECK_VICTIM));
+    }
+
+    @Test
+    void testDetailsOfDeath() throws InterruptedException{
+        assertThrows(IllegalStateException.class, () -> dbook.getDeathDetails(DEFAULT_VICTIM));
+        dbook.writeName(DEFAULT_VICTIM);
+        assertTrue(dbook.getDeathDetails(DEFAULT_VICTIM).isBlank());
+        dbook.writeDetails("ran for too long");
+        assertEquals("ran for too long", dbook.getDeathDetails(DEFAULT_VICTIM));
+        dbook.writeName(DEFAULT_CHECK_VICTIM);
+        sleep(INVALID_DETAILS_TIME);
+        dbook.writeDetails("not ran at all");
+        assertEquals("ran for too long", dbook.getDeathDetails(DEFAULT_VICTIM));
     }
 }
